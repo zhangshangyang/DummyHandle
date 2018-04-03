@@ -106,13 +106,11 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
         message = findViewById(R.id.textView);
         ImageButton go = findViewById(R.id.imageButton2);
         ImageButton back = findViewById(R.id.imageButton);
-
         go.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
-                  // webSocketClient.send(Move(Index,Destination++).toString());
-                    message.setText(Destination.toString());
+                  //webSocketClient.send(Move(Index,Destination+1).toString());
                 }else if(event.getAction() == MotionEvent.ACTION_UP){
                     webSocketClient.send(Stop().toString());
                 }
@@ -123,7 +121,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    webSocketClient.send(Move(Index,Destination-1).toString());
+                 //   webSocketClient.send(Move(Index,Destination-1).toString());
                 }else if(event.getAction() == MotionEvent.ACTION_UP){
                     webSocketClient.send(Stop().toString());
                 }
@@ -212,7 +210,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
             message.setText(message.getText()+"\n"+"Master ID:" + person);
             JSONArray jsonArray = new JSONObject(strResult).getJSONArray("Doubles");
             Destination = (Double) jsonArray.get(Index);
-            message.setText(message.getText()+"\n"+"Destination" + Destination);
+            message.setText(message.getText()+"\n"+"Destination = " + Destination);
             message.setText(message.getText()+"\n"+"X="+jsonArray.get(0));
             message.setText(message.getText()+"\n"+"Y="+jsonArray.get(1));
             message.setText(message.getText()+"\n"+"Z="+jsonArray.get(2));
