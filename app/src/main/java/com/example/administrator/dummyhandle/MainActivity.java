@@ -93,9 +93,8 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
     private int state;
     private int Index;
     private Double Destination;
-    private ImageButton go;
-    private ImageButton back;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,14 +104,15 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
         Index=0;
         Destination=0.0;
         message = findViewById(R.id.textView);
-        go = findViewById(R.id.imageButton2);
-        back = findViewById(R.id.imageButton);
+        ImageButton go = findViewById(R.id.imageButton2);
+        ImageButton back = findViewById(R.id.imageButton);
 
         go.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    webSocketClient.send(Move(Index,Destination+1).toString());
+                  // webSocketClient.send(Move(Index,Destination++).toString());
+                    message.setText(Destination.toString());
                 }else if(event.getAction() == MotionEvent.ACTION_UP){
                     webSocketClient.send(Stop().toString());
                 }
