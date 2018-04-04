@@ -33,7 +33,8 @@ import org.json.JSONObject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 @SuppressLint("ValidFragment")
@@ -86,6 +87,7 @@ class ViewDialogFragment extends DialogFragment {
     }
 }
 
+
 public class MainActivity extends AppCompatActivity  implements ViewDialogFragment.Callback{
     private WebSocketClient webSocketClient;
     private String string="ws://192.168.11.103:6341/"; //IP and port
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
     private int state;
     private int Index;
     private Double Destination;
-
+    private Timer timer;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,25 +106,42 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
         Index=0;
         Destination=0.0;
         message = findViewById(R.id.textView);
-        ImageButton go = findViewById(R.id.imageButton2);
+        ImageButton go =  findViewById(R.id.imageButton2);
         ImageButton back = findViewById(R.id.imageButton);
-        go.setOnTouchListener(new View.OnTouchListener() {
+       go.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
-                  //webSocketClient.send(Move(Index,Destination+1).toString());
-                }else if(event.getAction() == MotionEvent.ACTION_UP){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    TimerTask task= new TimerTask() {
+                        @Override
+                        public void run() {
+                            webSocketClient.send(Move(Index, Destination+1).toString());
+                        }
+                    };
+                    timer = new Timer(true);
+                    timer.schedule(task,0, 200);
+                }
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    timer.cancel();
                     webSocketClient.send(Stop().toString());
                 }
                 return false;
-            }
-        });
-        back.setOnTouchListener(new View.OnTouchListener() {
+        }
+    });
+       back.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
-                 //   webSocketClient.send(Move(Index,Destination-1).toString());
-                }else if(event.getAction() == MotionEvent.ACTION_UP){
+                if (event.getAction() == MotionEvent.ACTION_DOWN){
+                    TimerTask task= new TimerTask() {
+                        @Override
+                        public void run() {
+                            webSocketClient.send(Move(Index, Destination-1).toString());
+                        }
+                    };
+                    timer = new Timer(true);
+                    timer.schedule(task,0, 200);
+                } if(event.getAction() == MotionEvent.ACTION_UP){
+                    timer.cancel();
                     webSocketClient.send(Stop().toString());
                 }
                 return false;
@@ -157,7 +176,8 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
             @Override
             public void onClick(View v) {
                 if (state == 1){
-                    wbStart();
+                    Thread wbSTart= new wbStart();
+                    wbSTart.start();
                     state=0;
                 }
             }
@@ -228,8 +248,9 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
         }
     }
 
-    public void wbStart() {
-        new Thread(new Runnable() {
+
+
+    public class  wbStart extends Thread {
             @Override
             public void run() {
                 try {
@@ -258,12 +279,12 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
                     e.printStackTrace();
                 }
             }
-        }).start();
-    }
+        }
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (webSocketClient != null) {
+            timer.cancel();
             webSocketClient.close();
         }
     }
@@ -306,4 +327,5 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
         editor.commit();// 提交本次编辑
     }
 }
+
 
