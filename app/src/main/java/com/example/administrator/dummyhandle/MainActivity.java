@@ -251,9 +251,15 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
 
 
     public class  wbStart extends Thread {
+
             @Override
             public void run() {
                 try {
+                    SharedPreferences settings = getSharedPreferences("fanrunqi", 0);
+                    String isAmazing = settings.getString("config","ws://,192.168.11.103,:,6341,/");
+                    String[]  strs=isAmazing.split(",");   //利用正则表达来提取字符
+                    string = strs[0]+strs[1]+strs[2]+strs[3]+strs[4];
+
                     webSocketClient = new WebSocketClient(new URI(string), new Draft_10()) {
                         @Override
                         public void onOpen(ServerHandshake handshakedata) {
