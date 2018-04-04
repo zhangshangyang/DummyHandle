@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
        go.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN && state ==0) {
                     TimerTask task= new TimerTask() {
                         @Override
                         public void run() {
@@ -121,8 +121,10 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
                     timer = new Timer(true);
                     timer.schedule(task,0, 200);
                 }
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    timer.cancel();
+                if (event.getAction() == MotionEvent.ACTION_UP && state ==0) {
+                  try {
+                      timer.cancel();
+                  }catch (Exception e){e.printStackTrace();}
                     webSocketClient.send(Stop().toString());
                 }
                 return false;
@@ -131,7 +133,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
        back.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN && state ==0){
                     TimerTask task= new TimerTask() {
                         @Override
                         public void run() {
@@ -140,8 +142,8 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
                     };
                     timer = new Timer(true);
                     timer.schedule(task,0, 200);
-                } if(event.getAction() == MotionEvent.ACTION_UP){
-                    timer.cancel();
+                } if(event.getAction() == MotionEvent.ACTION_UP  && state ==0){
+                        timer.cancel();
                     webSocketClient.send(Stop().toString());
                 }
                 return false;
