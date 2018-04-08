@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
         @SuppressLint("SetTextI18n")
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            message.setText(message.getText()+"\n"+"connect successful");
+            message.setText("message:"+"\n"+"connect successful");
             parseJson((String) msg.obj);
         }
     };
@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
             message.setText("message:"+"\n"+"IP:"+ strs[1] +"\n"+"Port:"+ strs[3]);
             message.setText(message.getText()+"\n"+"Index="+Index);*/
             String person = new JSONObject(strResult).getString("Master ID");
-           //message.setText(message.getText()+"\n"+"Master ID:" + person);
+           message.setText(message.getText()+"\n"+"Master ID:" + person);
             JSONArray jsonArray = new JSONObject(strResult).getJSONArray("Doubles");
             Destination = (Double) jsonArray.get(Index);
             XV.setText((String) jsonArray.get(0));
