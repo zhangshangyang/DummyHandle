@@ -10,9 +10,9 @@
         android:id="@+id/linearLayout"
         android:layout_width="fill_parent"
         android:layout_height="162dp"
-        android:layout_marginTop="568dp"
+        android:layout_marginTop="36dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/R3value">
 
         <ImageButton
             android:id="@+id/imageButton"
@@ -38,50 +38,53 @@
 
     <RadioGroup
         android:id="@+id/sex_rg"
-        android:layout_width="wrap_content"
-        android:layout_height="80dp"
+        android:layout_width="105dp"
+        android:layout_height="342dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="118dp"
+        android:layout_marginTop="172dp"
         android:checkedButton="@id/X"
-        android:orientation="horizontal"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.023"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.26"
         tools:ignore="MissingConstraints">
 
         <RadioButton
             android:id="@+id/X"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="X"
             android:textSize="50dp" />
 
         <RadioButton
             android:id="@+id/Y"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Y"
             android:textSize="50dp" />
 
         <RadioButton
             android:id="@+id/Z"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Z"
             android:textSize="50dp" />
 
         <RadioButton
             android:id="@+id/R1"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="R1"
             android:textSize="50dp" />
 
         <RadioButton
             android:id="@+id/R3"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="R3"
             android:textSize="50dp" />
@@ -110,13 +113,19 @@
     <TextView
         android:id="@+id/textView"
         android:layout_width="fill_parent"
-        android:layout_height="400dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
-        android:text="Message："
+        android:layout_height="74dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:inputType="textMultiLine"
+        android:text="message："
+        app:layout_constraintBottom_toTopOf="@+id/Xvalue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.166"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/button3"
@@ -127,5 +136,179 @@
         android:text="停止"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Xvalue"
+        android:layout_width="120dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="184dp"
+        android:textSize="30dp"
+        android:gravity="center"
+        app:layout_constraintStart_toEndOf="@+id/sex_rg"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/textview_border"/>
+
+    <TextView
+        android:id="@+id/Yvalue"
+        android:layout_width="120dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:textSize="30dp"
+        app:layout_constraintStart_toEndOf="@+id/sex_rg"
+        app:layout_constraintTop_toBottomOf="@+id/Xvalue"
+        android:background="@drawable/textview_border"/>
+
+    <TextView
+        android:id="@+id/Zvalue"
+        android:layout_width="120dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/textview_border"
+        android:gravity="center"
+        android:textSize="30dp"
+        app:layout_constraintStart_toEndOf="@+id/sex_rg"
+        app:layout_constraintTop_toBottomOf="@+id/Yvalue" />
+    <TextView
+        android:id="@+id/R1value"
+        android:layout_width="120dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/textview_border"
+        android:gravity="center"
+        android:textSize="30dp"
+        app:layout_constraintStart_toEndOf="@+id/sex_rg"
+        app:layout_constraintTop_toBottomOf="@+id/Zvalue" />
+    <TextView
+        android:id="@+id/R3value"
+        android:layout_width="120dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/textview_border"
+        android:gravity="center"
+        android:textSize="30dp"
+        app:layout_constraintStart_toEndOf="@+id/sex_rg"
+        app:layout_constraintTop_toBottomOf="@+id/R1value" />
+
+    <TextView
+        android:id="@+id/XL"
+        android:layout_width="59dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="184dp"
+        android:textSize="30dp"
+        android:gravity="center"
+        app:layout_constraintStart_toEndOf="@+id/Xvalue"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/textview_boole"/>
+
+    <TextView
+        android:id="@+id/YL"
+        android:layout_width="59dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/textview_boole"
+        android:gravity="center"
+        android:textSize="30dp"
+        app:layout_constraintStart_toEndOf="@+id/Yvalue"
+        app:layout_constraintTop_toBottomOf="@+id/XL" />
+
+    <TextView
+        android:id="@+id/ZL"
+        android:layout_width="59dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/textview_boole"
+        android:gravity="center"
+        android:textSize="30dp"
+        app:layout_constraintStart_toEndOf="@+id/Zvalue"
+        app:layout_constraintTop_toBottomOf="@+id/YL" />
+    <TextView
+        android:id="@+id/R1L"
+        android:layout_width="59dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/textview_boole"
+        android:gravity="center"
+        android:textSize="30dp"
+        app:layout_constraintStart_toEndOf="@+id/R1value"
+        app:layout_constraintTop_toBottomOf="@+id/ZL" />
+    <TextView
+        android:id="@+id/R3L"
+        android:layout_width="59dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/textview_boole"
+        android:gravity="center"
+        android:textSize="30dp"
+        app:layout_constraintStart_toEndOf="@+id/R3value"
+        app:layout_constraintTop_toBottomOf="@+id/R1L" />
+    <TextView
+        android:id="@+id/XR"
+        android:layout_width="59dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="184dp"
+        android:textSize="30dp"
+        android:gravity="center"
+        app:layout_constraintStart_toEndOf="@+id/XL"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/textview_boole"/>
+
+    <TextView
+        android:id="@+id/YR"
+        android:layout_width="59dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/textview_boole"
+        android:gravity="center"
+        android:textSize="30dp"
+        app:layout_constraintStart_toEndOf="@+id/YL"
+        app:layout_constraintTop_toBottomOf="@+id/XL" />
+
+    <TextView
+        android:id="@+id/ZR"
+        android:layout_width="59dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/textview_boole"
+        android:gravity="center"
+        android:textSize="30dp"
+        app:layout_constraintStart_toEndOf="@+id/ZL"
+        app:layout_constraintTop_toBottomOf="@+id/YL" />
+    <TextView
+        android:id="@+id/R1R"
+        android:layout_width="59dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/textview_boole"
+        android:gravity="center"
+        android:textSize="30dp"
+        app:layout_constraintStart_toEndOf="@+id/R1L"
+        app:layout_constraintTop_toBottomOf="@+id/ZL" />
+    <TextView
+        android:id="@+id/R3R"
+        android:layout_width="59dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/textview_boole"
+        android:gravity="center"
+        android:textSize="30dp"
+        app:layout_constraintStart_toEndOf="@+id/R3L"
+        app:layout_constraintTop_toBottomOf="@+id/R1L" />
+
 </android.support.constraint.ConstraintLayout>
 

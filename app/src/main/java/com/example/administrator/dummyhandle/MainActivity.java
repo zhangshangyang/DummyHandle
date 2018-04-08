@@ -5,8 +5,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Handler;
@@ -105,6 +108,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
         state=1;
         Index=0;
         Destination=0.0;
+        registerScreenActionReceiver();
         message = findViewById(R.id.textView);
         ImageButton go =  findViewById(R.id.imageButton2);
         ImageButton back = findViewById(R.id.imageButton);
@@ -198,7 +202,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
             public void onClick(View v) {
                 if (webSocketClient != null) {
                     webSocketClient.close();
-                    message.setText("");
+                    message.setText("message:");
                     state = 1;
                 }
             }
@@ -280,6 +284,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
                         }
                         public void onError(Exception ex) {
                             Log.d("picher_log", "链接错误");
+
                         }
                     };
                     webSocketClient.connect();// connect webSocket
@@ -296,6 +301,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
             webSocketClient.close();
         }
     }
+    //发送Move指令
     public JSONObject Move (int Index,Double Destination){
         try {
             // 首先最外层是{}，是创建一个对象
@@ -312,6 +318,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
             throw new RuntimeException(ex);
         }
     }
+    //发送Stop指令
     public JSONObject Stop (){
         try {
             // 首先最外层是{}，是创建一个对象
@@ -325,6 +332,32 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
             throw new RuntimeException(ex);
         }
     }
+// 监听锁屏幕
+    private void registerScreenActionReceiver(){
+        final IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+        registerReceiver(receiver, filter);
+    }
+
+    private final BroadcastReceiver receiver = new BroadcastReceiver(){
+
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_SCREEN_OFF)) {
+                try {
+                        webSocketClient.close();
+                        message.setText("message:");
+                        state = 1;
+
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    };
+
     @SuppressLint("ApplySharedPref")
     public void onClick(String IP, String Port) {
         Toast.makeText(MainActivity.this, "IP: " + IP + " Port: " + Port, Toast.LENGTH_SHORT).show();
