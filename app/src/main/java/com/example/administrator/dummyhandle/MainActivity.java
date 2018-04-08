@@ -99,6 +99,21 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
     private int Index;
     private Double Destination;
     private Timer timer;
+    private TextView XL;
+    private TextView YL;
+    private TextView ZL;
+    private TextView R1L;
+    private TextView R3L;
+    private TextView XR;
+    private TextView YR;
+    private TextView ZR;
+    private TextView R1R;
+    private TextView R3R;
+    private TextView XV;
+    private TextView YV;
+    private TextView ZV;
+    private TextView R1V;
+    private TextView R3V;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +125,22 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
         Destination=0.0;
         registerScreenActionReceiver();
         message = findViewById(R.id.textView);
+        XL = findViewById(R.id.XL);
+        YL = findViewById(R.id.YL);
+        ZL = findViewById(R.id.ZL);
+        R1L = findViewById(R.id.R1L);
+        R3L = findViewById(R.id.R3L);
+        XR = findViewById(R.id.XR);
+        YR = findViewById(R.id.YR);
+        ZR = findViewById(R.id.ZR);
+        R1R = findViewById(R.id.R1R);
+        R3R = findViewById(R.id.R3R);
+        XV = findViewById(R.id.Xvalue);
+        YV = findViewById(R.id.Yvalue);
+        ZV = findViewById(R.id.Zvalue);
+        R1V = findViewById(R.id.R1value);
+        R3V = findViewById(R.id.R3value);
+
         ImageButton go =  findViewById(R.id.imageButton2);
         ImageButton back = findViewById(R.id.imageButton);
        go.setOnTouchListener(new View.OnTouchListener() {
@@ -220,6 +251,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
         @SuppressLint("SetTextI18n")
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            message.setText(message.getText()+"\n"+"connect successful");
             parseJson((String) msg.obj);
         }
     };
@@ -227,27 +259,43 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
     @SuppressLint("SetTextI18n")
     private void parseJson(String strResult){
         try{
-            SharedPreferences settings = getSharedPreferences("fanrunqi", 0);
+           /* SharedPreferences settings = getSharedPreferences("fanrunqi", 0);
             String isAmazing = settings.getString("config","ws://,192.168.11.103,:,6341,/");
             String[]  strs=isAmazing.split(",");   //利用正则表达来提取字符
             message.setText("message:"+"\n"+"IP:"+ strs[1] +"\n"+"Port:"+ strs[3]);
-            message.setText(message.getText()+"\n"+"Index="+Index);
+            message.setText(message.getText()+"\n"+"Index="+Index);*/
             String person = new JSONObject(strResult).getString("Master ID");
-            message.setText(message.getText()+"\n"+"Master ID:" + person);
+           //message.setText(message.getText()+"\n"+"Master ID:" + person);
             JSONArray jsonArray = new JSONObject(strResult).getJSONArray("Doubles");
             Destination = (Double) jsonArray.get(Index);
-            message.setText(message.getText()+"\n"+"Destination = " + Destination);
+            XV.setText((String) jsonArray.get(0));
+            YV.setText((String) jsonArray.get(1));
+            ZV.setText((String) jsonArray.get(2));
+            R1V.setText((String) jsonArray.get(3));
+            R3V.setText((String) jsonArray.get(4));
+            /*message.setText(message.getText()+"\n"+"Destination = " + Destination);
             message.setText(message.getText()+"\n"+"X="+jsonArray.get(0));
             message.setText(message.getText()+"\n"+"Y="+jsonArray.get(1));
             message.setText(message.getText()+"\n"+"Z="+jsonArray.get(2));
             message.setText(message.getText()+"\n"+"R1="+jsonArray.get(3));
-            message.setText(message.getText()+"\n"+"R3="+jsonArray.get(4));
+            message.setText(message.getText()+"\n"+"R3="+jsonArray.get(4));*/
             JSONArray jsonArray2 = new JSONObject(strResult).getJSONArray("Booleans");
-            message.setText(message.getText()+"\n"+" X:  MOVE =" +jsonArray2.get(0)+ "  Limit- ="+jsonArray2.get(5)+"   Limit+ ="+jsonArray2.get(6));
+            if (jsonArray2.get(5).toString().equals("True")) {XL.setTextColor(0xffff0000);}
+            if (jsonArray2.get(6).toString().equals("True")) {XR.setTextColor(0xffff0000);}
+            if (jsonArray2.get(7).toString().equals("True")) {YL.setTextColor(0xffff0000);}
+            if (jsonArray2.get(8).toString().equals("True")) {YR.setTextColor(0xffff0000);}
+            if (jsonArray2.get(9).toString().equals("True")) {ZL.setTextColor(0xffff0000);}
+            if (jsonArray2.get(10).toString().equals("True")) {ZR.setTextColor(0xffff0000);}
+            if (jsonArray2.get(11).toString().equals("True")) {R1L.setTextColor(0xffff0000);}
+            if (jsonArray2.get(12).toString().equals("True")) {R1R.setTextColor(0xffff0000);}
+            if (jsonArray2.get(13).toString().equals("True")) {R3L.setTextColor(0xffff0000);}
+            if (jsonArray2.get(14).toString().equals("True")) {R3R.setTextColor(0xffff0000);}
+
+           /* message.setText(message.getText()+"\n"+" X:  MOVE =" +jsonArray2.get(0)+ "  Limit- ="+jsonArray2.get(5)+"   Limit+ ="+jsonArray2.get(6));
             message.setText(message.getText()+"\n"+" Y:  MOVE =" +jsonArray2.get(1)+ "  Limit- ="+jsonArray2.get(7)+"   Limit+ ="+jsonArray2.get(8));
             message.setText(message.getText()+"\n"+" Z:  MOVE =" +jsonArray2.get(2)+ "  Limit- ="+jsonArray2.get(9)+"   Limit+ ="+jsonArray2.get(10));
             message.setText(message.getText()+"\n"+"R1:  MOVE =" +jsonArray2.get(3)+ "  Limit- ="+jsonArray2.get(11)+"  Limit+ ="+jsonArray2.get(12));
-            message.setText(message.getText()+"\n"+"R3:  MOVE =" +jsonArray2.get(4)+ "  Limit- ="+jsonArray2.get(13)+"  Limit+ ="+jsonArray2.get(14));
+            message.setText(message.getText()+"\n"+"R3:  MOVE =" +jsonArray2.get(4)+ "  Limit- ="+jsonArray2.get(13)+"  Limit+ ="+jsonArray2.get(14));*/
         }catch (JSONException e) {
             message.setText("Json pares error");
             e.printStackTrace();
