@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,9 +13,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,7 +48,6 @@ class ViewDialogFragment extends DialogFragment {
     public interface Callback {
         void onClick(String userName, String password);
     }
-
     private Callback callback;
 
     public void show(FragmentManager fragmentManager) {
@@ -100,6 +100,11 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
     private int Index;
     private Double Destination;
     private Timer timer;
+    private ImageButton go;
+    private ImageButton back;
+    private RadioGroup radioGroup;
+    private Button button;
+    private Button button2;
     private TextView XL;
     private TextView YL;
     private TextView ZL;
@@ -115,6 +120,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
     private TextView ZV;
     private TextView R1V;
     private TextView R3V;
+    private Vibrator v;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,10 +147,10 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
         ZV = findViewById(R.id.Zvalue);
         R1V = findViewById(R.id.R1value);
         R3V = findViewById(R.id.R3value);
-
-        ImageButton go =  findViewById(R.id.imageButton2);
-        ImageButton back = findViewById(R.id.imageButton);
-       go.setOnTouchListener(new View.OnTouchListener() {
+        v = (Vibrator)getApplication().getSystemService(Service.VIBRATOR_SERVICE);
+        go =  findViewById(R.id.imageButton2);
+        back = findViewById(R.id.imageButton);
+        go.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN && state ==0) {
@@ -154,12 +160,24 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
                             webSocketClient.send(Move(Index, Destination+1).toString());
                         }
                     };
+                    Vibrate();
+                    back.setEnabled(false);
+                    button.setEnabled(false);
+                    button2.setEnabled(false);
+                    for (int i= 0;i<radioGroup.getChildCount();i++) {radioGroup.getChildAt(i).setEnabled(false);
+                    }
                     timer = new Timer(true);
                     timer.schedule(task,0, 200);
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP && state ==0) {
                   try {
                       timer.cancel();
+                      for (int i= 0;i<radioGroup.getChildCount();i++) {radioGroup.getChildAt(i).setEnabled(true);
+                      }
+                      Vibrate();
+                      back.setEnabled(true);
+                      button.setEnabled(true);
+                      button2.setEnabled(true);
                   }catch (Exception e){e.printStackTrace();}
                     webSocketClient.send(Stop().toString());
                 }
@@ -176,17 +194,39 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
                             webSocketClient.send(Move(Index, Destination-1).toString());
                         }
                     };
+                    Vibrate();
+                    go.setEnabled(false);
+                    button.setEnabled(false);
+                    button2.setEnabled(false);
+                    for (int i= 0;i<radioGroup.getChildCount();i++) {radioGroup.getChildAt(i).setEnabled(false);
+                    }
                     timer = new Timer(true);
                     timer.schedule(task,0, 200);
                 } if(event.getAction() == MotionEvent.ACTION_UP  && state ==0){
                         timer.cancel();
+                    Vibrate();
+                    go.setEnabled(true);
+                    button.setEnabled(true);
+                    button2.setEnabled(true);
+                    for (int i= 0;i<radioGroup.getChildCount();i++) {radioGroup.getChildAt(i).setEnabled(true);
+                    }
                     webSocketClient.send(Stop().toString());
                 }
                 return false;
             }
         });
 
-        RadioGroup radioGroup = findViewById(R.id.sex_rg);
+        findViewById(R.id.imageButton3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (state==0) {
+                    Vibrate();
+                    webSocketClient.send(Stop().toString());
+                }
+            }
+        });
+
+         radioGroup = findViewById(R.id.sex_rg);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -209,7 +249,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
                 }
             }
         });
-        Button button = findViewById(R.id.button);
+        button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -217,26 +257,26 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
                     Thread wbSTart= new wbStart();
                     wbSTart.start();
                     state=0;
+                    button.setText("停止");
+                }else if (state==0){
+                        webSocketClient.close();
+                        message.setText("message:"+"\n"+"connect close");
+                        state = 1;
+                    button.setText("开始");
                 }
             }
         });
 
-        Button button2 = findViewById(R.id.button2);
+        button2 = findViewById(R.id.button2);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (state==0) {
+                webSocketClient.close();
+                button.setText("开始");
+                message.setText("message:");
+                state = 1;}
                 showViewDialogFragment(v);
-            }
-        });
-        Button button3 = findViewById(R.id.button3);
-        button3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (webSocketClient != null) {
-                    webSocketClient.close();
-                    message.setText("message:"+"\n"+"connect close");
-                    state = 1;
-                }
             }
         });
     }
@@ -245,6 +285,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
     public void showViewDialogFragment(View view) {
         ViewDialogFragment viewDialogFragment = new ViewDialogFragment();
         viewDialogFragment.show(getFragmentManager());
+
     }
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
@@ -252,7 +293,6 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
         @SuppressLint("SetTextI18n")
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            message.setText("message:"+"\n"+"connect successful");
             parseJson((String) msg.obj);
         }
     };
@@ -260,11 +300,10 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
     @SuppressLint("SetTextI18n")
     private void parseJson(String strResult){
         try{
-           /* SharedPreferences settings = getSharedPreferences("fanrunqi", 0);
+            SharedPreferences settings = getSharedPreferences("fanrunqi", 0);
             String isAmazing = settings.getString("config","ws://,192.168.11.103,:,6341,/");
             String[]  strs=isAmazing.split(",");   //利用正则表达来提取字符
-            message.setText("message:"+"\n"+"IP:"+ strs[1] +"\n"+"Port:"+ strs[3]);
-            message.setText(message.getText()+"\n"+"Index="+Index);*/
+            message.setText("message:"+"\n"+"connect successful"+"\n"+"IP:"+ strs[1] +" "+"Port:"+ strs[3]);
             String person = new JSONObject(strResult).getString("Master ID");
             message.setText(message.getText()+"\n"+"Master ID:" + person);
             JSONArray jsonArray = new JSONObject(strResult).getJSONArray("Doubles");
@@ -274,36 +313,26 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
             ZV.setText(jsonArray.get(2).toString());
             R1V.setText(jsonArray.get(3).toString());
             R3V.setText(jsonArray.get(4).toString());
-            /*message.setText(message.getText()+"\n"+"Destination = " + Destination);
-            message.setText(message.getText()+"\n"+"X="+jsonArray.get(0));
-            message.setText(message.getText()+"\n"+"Y="+jsonArray.get(1));
-            message.setText(message.getText()+"\n"+"Z="+jsonArray.get(2));
-            message.setText(message.getText()+"\n"+"R1="+jsonArray.get(3));
-            message.setText(message.getText()+"\n"+"R3="+jsonArray.get(4));*/
             JSONArray jsonArray2 = new JSONObject(strResult).getJSONArray("Booleans");
-            if (jsonArray2.get(5).toString().equals("True")) {XL.setBackgroundColor(0xffff0000);}
-            if (jsonArray2.get(6).toString().equals("True")) {XR.setBackgroundColor(0xffff0000);}
-            if (jsonArray2.get(7).toString().equals("True")) {YL.setBackgroundColor(0xffff0000);}
-            if (jsonArray2.get(8).toString().equals("True")) {YR.setBackgroundColor(0xffff0000);}
-            if (jsonArray2.get(9).toString().equals("True")) {ZL.setBackgroundColor(0xffff0000);}
-            if (jsonArray2.get(10).toString().equals("True")) {ZR.setBackgroundColor(0xffff0000);}
-            if (jsonArray2.get(11).toString().equals("True")) {R1L.setBackgroundColor(0xffff0000);}
-            if (jsonArray2.get(12).toString().equals("True")) {R1R.setBackgroundColor(0xffff0000);}
-            if (jsonArray2.get(13).toString().equals("True")) {R3L.setBackgroundColor(0xffff0000);}
-            if (jsonArray2.get(14).toString().equals("True")) {R3R.setBackgroundColor(0xffff0000);}
-
-           /* message.setText(message.getText()+"\n"+" X:  MOVE =" +jsonArray2.get(0)+ "  Limit- ="+jsonArray2.get(5)+"   Limit+ ="+jsonArray2.get(6));
-            message.setText(message.getText()+"\n"+" Y:  MOVE =" +jsonArray2.get(1)+ "  Limit- ="+jsonArray2.get(7)+"   Limit+ ="+jsonArray2.get(8));
-            message.setText(message.getText()+"\n"+" Z:  MOVE =" +jsonArray2.get(2)+ "  Limit- ="+jsonArray2.get(9)+"   Limit+ ="+jsonArray2.get(10));
-            message.setText(message.getText()+"\n"+"R1:  MOVE =" +jsonArray2.get(3)+ "  Limit- ="+jsonArray2.get(11)+"  Limit+ ="+jsonArray2.get(12));
-            message.setText(message.getText()+"\n"+"R3:  MOVE =" +jsonArray2.get(4)+ "  Limit- ="+jsonArray2.get(13)+"  Limit+ ="+jsonArray2.get(14));*/
+            if (jsonArray2.get(5).toString().equals("true")) {XL.setBackgroundColor(0xffff0000);}
+            if (jsonArray2.get(6).toString().equals("true")) {XR.setBackgroundColor(0xffff0000);}
+            if (jsonArray2.get(7).toString().equals("true")) {YL.setBackgroundColor(0xffff0000);}
+            if (jsonArray2.get(8).toString().equals("true")) {YR.setBackgroundColor(0xffff0000);}
+            if (jsonArray2.get(9).toString().equals("true")) {ZL.setBackgroundColor(0xffff0000);}
+            if (jsonArray2.get(10).toString().equals("true")) {ZR.setBackgroundColor(0xffff0000);}
+            if (jsonArray2.get(11).toString().equals("true")) {R1L.setBackgroundColor(0xffff0000);}
+            if (jsonArray2.get(12).toString().equals("true")) {R1R.setBackgroundColor(0xffff0000);}
+            if (jsonArray2.get(13).toString().equals("true")) {R3L.setBackgroundColor(0xffff0000);}
+            if (jsonArray2.get(14).toString().equals("true")) {R3R.setBackgroundColor(0xffff0000);}
         }catch (JSONException e) {
             message.setText("Json pares error");
             e.printStackTrace();
         }
     }
 
-
+    private void  Vibrate(){
+        v.vibrate(300);
+    }
 
     public class  wbStart extends Thread {
 
@@ -394,15 +423,19 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
         @Override
         public void onReceive(final Context context, final Intent intent) {
             String action = intent.getAction();
-            if (action.equals(Intent.ACTION_SCREEN_OFF)) {
-                try {
-                        webSocketClient.close();
-                        message.setText("message:");
-                        state = 1;
-
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+            if (action.equals(Intent.ACTION_SCREEN_OFF) && state==0) {
+                back.setEnabled(true);
+                go.setEnabled(true);
+                button.setEnabled(true);
+                button2.setEnabled(true);
+                for (int i= 0;i<radioGroup.getChildCount();i++) {radioGroup.getChildAt(i).setEnabled(true);
                 }
+                button.setText("开始");
+                webSocketClient.send(Stop().toString());
+                webSocketClient.close();
+                message.setText("message:");
+                state = 1;
+                timer.cancel();
             }
         }
     };
@@ -410,12 +443,17 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
     @SuppressLint("ApplySharedPref")
     public void onClick(String IP, String Port) {
         Toast.makeText(MainActivity.this, "IP: " + IP + " Port: " + Port, Toast.LENGTH_SHORT).show();
-        String wb ="ws://,"+ IP +",:,"+Port+",/";
-        SharedPreferences settings = getSharedPreferences("fanrunqi", 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString("config",wb);
-        editor.commit();// 提交本次编辑
+        if (IP.equals(null) || Port.equals(null)){
+
+        }else {
+            String wb = "ws://," + IP + ",:," + Port + ",/";
+            SharedPreferences settings = getSharedPreferences("fanrunqi", 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString("config", wb);
+            editor.commit();// 提交本次编辑
+        }
     }
+
 }
 
 
