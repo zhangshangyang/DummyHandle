@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
     private Timer timer;
     private ImageButton go;
     private ImageButton back;
+    private ImageButton stop;
     private RadioGroup radioGroup;
     private Button button;
     private Button button2;
@@ -127,6 +128,8 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//竖屏
+
+
         state=1;
         Index=0;
         Destination=0.0;
@@ -150,6 +153,11 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
         v = (Vibrator)getApplication().getSystemService(Service.VIBRATOR_SERVICE);
         go =  findViewById(R.id.imageButton2);
         back = findViewById(R.id.imageButton);
+        radioGroup = findViewById(R.id.sex_rg);
+        stop = findViewById(R.id.imageButton3);
+        button = findViewById(R.id.button);
+        button2 = findViewById(R.id.button2);
+
         go.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -216,7 +224,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
             }
         });
 
-        findViewById(R.id.imageButton3).setOnClickListener(new View.OnClickListener() {
+        stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (state==0) {
@@ -226,7 +234,6 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
             }
         });
 
-         radioGroup = findViewById(R.id.sex_rg);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -249,7 +256,6 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
                 }
             }
         });
-        button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -267,7 +273,6 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
             }
         });
 
-        button2 = findViewById(R.id.button2);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
