@@ -265,14 +265,14 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
             message.setText("message:"+"\n"+"IP:"+ strs[1] +"\n"+"Port:"+ strs[3]);
             message.setText(message.getText()+"\n"+"Index="+Index);*/
             String person = new JSONObject(strResult).getString("Master ID");
-           message.setText(message.getText()+"\n"+"Master ID:" + person);
+            message.setText(message.getText()+"\n"+"Master ID:" + person);
             JSONArray jsonArray = new JSONObject(strResult).getJSONArray("Doubles");
             Destination = (Double) jsonArray.get(Index);
-            XV.setText((String) jsonArray.get(0));
-            YV.setText((String) jsonArray.get(1));
-            ZV.setText((String) jsonArray.get(2));
-            R1V.setText((String) jsonArray.get(3));
-            R3V.setText((String) jsonArray.get(4));
+            XV.setText(jsonArray.get(0).toString());
+            YV.setText(jsonArray.get(1).toString());
+            ZV.setText(jsonArray.get(2).toString());
+            R1V.setText(jsonArray.get(3).toString());
+            R3V.setText(jsonArray.get(4).toString());
             /*message.setText(message.getText()+"\n"+"Destination = " + Destination);
             message.setText(message.getText()+"\n"+"X="+jsonArray.get(0));
             message.setText(message.getText()+"\n"+"Y="+jsonArray.get(1));
