@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -233,7 +234,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
             public void onClick(View v) {
                 if (webSocketClient != null) {
                     webSocketClient.close();
-                    message.setText("message:");
+                    message.setText("message:"+"\n"+"connect close");
                     state = 1;
                 }
             }
@@ -280,16 +281,16 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
             message.setText(message.getText()+"\n"+"R1="+jsonArray.get(3));
             message.setText(message.getText()+"\n"+"R3="+jsonArray.get(4));*/
             JSONArray jsonArray2 = new JSONObject(strResult).getJSONArray("Booleans");
-            if (jsonArray2.get(5).toString().equals("True")) {XL.setTextColor(0xffff0000);}
-            if (jsonArray2.get(6).toString().equals("True")) {XR.setTextColor(0xffff0000);}
-            if (jsonArray2.get(7).toString().equals("True")) {YL.setTextColor(0xffff0000);}
-            if (jsonArray2.get(8).toString().equals("True")) {YR.setTextColor(0xffff0000);}
-            if (jsonArray2.get(9).toString().equals("True")) {ZL.setTextColor(0xffff0000);}
-            if (jsonArray2.get(10).toString().equals("True")) {ZR.setTextColor(0xffff0000);}
-            if (jsonArray2.get(11).toString().equals("True")) {R1L.setTextColor(0xffff0000);}
-            if (jsonArray2.get(12).toString().equals("True")) {R1R.setTextColor(0xffff0000);}
-            if (jsonArray2.get(13).toString().equals("True")) {R3L.setTextColor(0xffff0000);}
-            if (jsonArray2.get(14).toString().equals("True")) {R3R.setTextColor(0xffff0000);}
+            if (jsonArray2.get(5).toString().equals("True")) {XL.setBackgroundColor(0xffff0000);}
+            if (jsonArray2.get(6).toString().equals("True")) {XR.setBackgroundColor(0xffff0000);}
+            if (jsonArray2.get(7).toString().equals("True")) {YL.setBackgroundColor(0xffff0000);}
+            if (jsonArray2.get(8).toString().equals("True")) {YR.setBackgroundColor(0xffff0000);}
+            if (jsonArray2.get(9).toString().equals("True")) {ZL.setBackgroundColor(0xffff0000);}
+            if (jsonArray2.get(10).toString().equals("True")) {ZR.setBackgroundColor(0xffff0000);}
+            if (jsonArray2.get(11).toString().equals("True")) {R1L.setBackgroundColor(0xffff0000);}
+            if (jsonArray2.get(12).toString().equals("True")) {R1R.setBackgroundColor(0xffff0000);}
+            if (jsonArray2.get(13).toString().equals("True")) {R3L.setBackgroundColor(0xffff0000);}
+            if (jsonArray2.get(14).toString().equals("True")) {R3R.setBackgroundColor(0xffff0000);}
 
            /* message.setText(message.getText()+"\n"+" X:  MOVE =" +jsonArray2.get(0)+ "  Limit- ="+jsonArray2.get(5)+"   Limit+ ="+jsonArray2.get(6));
             message.setText(message.getText()+"\n"+" Y:  MOVE =" +jsonArray2.get(1)+ "  Limit- ="+jsonArray2.get(7)+"   Limit+ ="+jsonArray2.get(8));
