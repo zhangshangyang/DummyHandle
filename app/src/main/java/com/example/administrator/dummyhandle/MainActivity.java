@@ -94,7 +94,7 @@ class ViewDialogFragment extends DialogFragment {
 
 public class MainActivity extends AppCompatActivity  implements ViewDialogFragment.Callback{
     private WebSocketClient webSocketClient;
-    private String string="ws://192.168.11.103:6341/"; //IP and port
+    private String string="ws://192.168.10.239:6341/"; //IP and port
     private TextView message;
     private int state;
     private int Index;
@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
         button = findViewById(R.id.button);
         button2 = findViewById(R.id.button2);
 
+
         go.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -165,7 +166,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
                     TimerTask task= new TimerTask() {
                         @Override
                         public void run() {
-                            webSocketClient.send(Move(Index, Destination+1).toString());
+                            webSocketClient.send(step(Index, "+").toString());
                         }
                     };
                     Vibrate();
@@ -199,7 +200,7 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
                     TimerTask task= new TimerTask() {
                         @Override
                         public void run() {
-                            webSocketClient.send(Move(Index, Destination-1).toString());
+                            webSocketClient.send(step(Index, "-").toString());
                         }
                     };
                     Vibrate();
@@ -319,16 +320,16 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
             R1V.setText(jsonArray.get(3).toString());
             R3V.setText(jsonArray.get(4).toString());
             JSONArray jsonArray2 = new JSONObject(strResult).getJSONArray("Booleans");
-            if (jsonArray2.get(5).toString().equals("true")) {XL.setBackgroundColor(0xffff0000);}
-            if (jsonArray2.get(6).toString().equals("true")) {XR.setBackgroundColor(0xffff0000);}
-            if (jsonArray2.get(7).toString().equals("true")) {YL.setBackgroundColor(0xffff0000);}
-            if (jsonArray2.get(8).toString().equals("true")) {YR.setBackgroundColor(0xffff0000);}
-            if (jsonArray2.get(9).toString().equals("true")) {ZL.setBackgroundColor(0xffff0000);}
-            if (jsonArray2.get(10).toString().equals("true")) {ZR.setBackgroundColor(0xffff0000);}
-            if (jsonArray2.get(11).toString().equals("true")) {R1L.setBackgroundColor(0xffff0000);}
-            if (jsonArray2.get(12).toString().equals("true")) {R1R.setBackgroundColor(0xffff0000);}
-            if (jsonArray2.get(13).toString().equals("true")) {R3L.setBackgroundColor(0xffff0000);}
-            if (jsonArray2.get(14).toString().equals("true")) {R3R.setBackgroundColor(0xffff0000);}
+            if (jsonArray2.get(5).toString().equals("true")) {XL.setBackgroundColor(0xffff0000);}else {XL.setBackgroundColor(0xff660000);}
+            if (jsonArray2.get(6).toString().equals("true")) {XR.setBackgroundColor(0xffff0000);}else {XR.setBackgroundColor(0xff660000);}
+            if (jsonArray2.get(7).toString().equals("true")) {YL.setBackgroundColor(0xffff0000);}else {YL.setBackgroundColor(0xff660000);}
+            if (jsonArray2.get(8).toString().equals("true")) {YR.setBackgroundColor(0xffff0000);}else {YR.setBackgroundColor(0xff660000);}
+            if (jsonArray2.get(9).toString().equals("true")) {ZL.setBackgroundColor(0xffff0000);}else {ZL.setBackgroundColor(0xff660000);}
+            if (jsonArray2.get(10).toString().equals("true")) {ZR.setBackgroundColor(0xffff0000);}else {ZR.setBackgroundColor(0xff660000);}
+            if (jsonArray2.get(11).toString().equals("true")) {R1L.setBackgroundColor(0xffff0000);}else {R1L.setBackgroundColor(0xff660000);}
+            if (jsonArray2.get(12).toString().equals("true")) {R1R.setBackgroundColor(0xffff0000);}else {R1R.setBackgroundColor(0xff660000);}
+            if (jsonArray2.get(13).toString().equals("true")) {R3L.setBackgroundColor(0xffff0000);}else {R3L.setBackgroundColor(0xff660000);}
+            if (jsonArray2.get(14).toString().equals("true")) {R3R.setBackgroundColor(0xffff0000);}else {R3R.setBackgroundColor(0xff660000);}
         }catch (JSONException e) {
             message.setText("Json pares error");
             e.printStackTrace();
@@ -394,6 +395,22 @@ public class MainActivity extends AppCompatActivity  implements ViewDialogFragme
             JSONObject data = new JSONObject();
             data.put("Index", Index);
             data.put("Destination", Destination);
+            person.put("data", data.toString());//data value is String
+            return person;
+        } catch (JSONException ex) {
+            // 键为null或使用json不支持的数字格式(NaN, infinities)
+            throw new RuntimeException(ex);
+        }
+    }
+    public JSONObject step (int Index,String Dir){
+        try {
+            // 首先最外层是{}，是创建一个对象
+            JSONObject person = new JSONObject();
+            person.put("command", "STEP");
+            // 键data的值是对象，所以又要创建一个对象
+            JSONObject data = new JSONObject();
+            data.put("Index", Index);
+            data.put("Dir", Dir);
             person.put("data", data.toString());//data value is String
             return person;
         } catch (JSONException ex) {
